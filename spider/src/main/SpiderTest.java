@@ -1,9 +1,9 @@
 package main;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,16 +15,11 @@ public class SpiderTest {
         List<Zhihu> questionList = new ArrayList<Zhihu>();
         String url = "http://www.zhihu.com/explore/recommendations";
         questionList = t.getRecommendations(url);
-        for(Zhihu question : questionList ){
-        	System.out.println(question.toString());
-        }
-//        String result = t.sendGet("http://www.zhihu.com/explore/recommendations");
-//        String reg = "question_link.+?>(.+?)<";
-//        List<Zhihu> questionList = new ArrayList<Zhihu>();
-//        questionList = t.regexString(result, reg);
-//        for(Zhihu question: questionList){
-//        	System.out.println(question.toString());
+//        for(Zhihu question : questionList ){
+//        	System.out.println(question.writeString());
 //        }
+        String filePath = "E:/java/spider.txt";
+        t.printTxt(filePath, questionList);
 	}
 	public List<Zhihu> getRecommendations(String url){
 		List<Zhihu> list = new ArrayList<Zhihu>();
@@ -45,23 +40,15 @@ public class SpiderTest {
 		}
 		return list;
 	}
-    
-//    public List<Zhihu> getRecommendations(String targetStr, String patternStr) {  
-//    	List<Zhihu> questionList = new ArrayList<Zhihu>();
-//    	  Pattern p1 = Pattern.compile(patternStr);
-//    	  // 定义一个matcher用来做匹配
-//    	  Matcher m1 = p1.matcher(targetStr);
-//    	  
-////    	  Pattern p2 = Pattern.compile("question_link.+?>(.+?)<");
-//    	  Pattern p3 = Pattern.compile("question_link.+?href=\"(.+?)\".+?>(.+?)<");
-//    	  Matcher m3 = p3.matcher(targetStr);
-//    	  while (m3.find()) {
-//    		  Zhihu z = new Zhihu();
-//    		  z.question = m3.group(2);
-//    		  z.zhihuUrl = m3.group(1);
-//    		  questionList.add(z);
-//    	  }
-//    	  return questionList;
-//    }
-    
+	public void printTxt(String filePath,List<Zhihu> questionList){
+		BufferedWriter bw = null;
+		try{
+			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(filePath))));
+			for(Zhihu zhihu: questionList){
+				bw.write(zhihu.writeString());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 }
